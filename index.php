@@ -28,7 +28,7 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Sigra Rosa</title>
+  <title>SIRAD</title>
   <link rel="icon" href="img/sr.png" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -51,7 +51,7 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
     class="fixed-sidebar flex flex-col w-64 h-screen pb-6 px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l">
     <a class="navbar-brand text-gray-600 flex items-center">
       <img src="img/sr.png" alt="" width="50" height="50" class="d-inline-block" id="logo" style="margin-right: 10px">
-      <span class="ml-2">Sistem Informasi Radiografi RSJ. Ghrasia</span>
+      <span class="ml-2">Sistem Informasi Radiologi</span>
     </a>
 
     <div class="flex flex-col justify-between flex-1 mt-6">

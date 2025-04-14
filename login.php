@@ -32,7 +32,7 @@ if (isset($_COOKIE['user'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
-    <title>Sigra Rosa</title>
+    <title>SIRAD</title>
     <link rel="icon" href="img/sr.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -45,10 +45,10 @@ if (isset($_COOKIE['user'])) {
             <div class="flex flex-col w-full">
                 <a class="navbar-brand text-gray-600 flex items-center">
                     <img src="img/sr.png" alt="" width="90" class="d-inline-block mr-3" id="logo">
-                    <span class="ml-2">
-                        <h1 class="text-5xl text-gray-800 font-bold">SIGRA ROSA</h1>
+                    <span class="ml-4">
+                        <h1 class="text-5xl text-gray-800 font-bold">SIRAD</h1>
                         <p class="w-9/12 mx-auto md:mx-0 text-gray-500">
-                        Sistem Informasi Radiografi RSJ. Ghrasia.
+                        Sistem Informasi Radiologi
                         </p>
                     </span>
                 </a>
