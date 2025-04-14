@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "build": "esbuild ./src/script.js --outfile=./src/main.js --bundle --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.4"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.1",
+    "esbuild": "^0.23.0"
+  }
+}
