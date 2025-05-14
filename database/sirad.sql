@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 14, 2025 at 11:38 AM
+-- Generation Time: May 14, 2025 at 03:33 PM
 -- Server version: 8.0.42-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `sirad`
 --
-CREATE DATABASE IF NOT EXISTS `sirad` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `sirad` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `sirad`;
 
 -- --------------------------------------------------------
@@ -31,10 +31,10 @@ USE `sirad`;
 
 CREATE TABLE `pasien` (
   `ID_PASIEN` int NOT NULL,
-  `nama_pasien` varchar(50) NOT NULL,
-  `tanggal_lahir` varchar(50) NOT NULL,
-  `alamat` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `nama_pasien` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `tanggal_lahir` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -47,11 +47,11 @@ CREATE TABLE `pemeriksaan` (
   `ID_USER` int NOT NULL,
   `ID_PASIEN` int NOT NULL,
   `no_rekam_medis` int NOT NULL,
-  `tanggal_pemeriksaan` varchar(20) NOT NULL,
-  `jenis_pemeriksaan` varchar(50) NOT NULL,
+  `tanggal_pemeriksaan` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_pemeriksaan` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `gambar_pemeriksaan` blob NOT NULL,
-  `expertise` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `expertise` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -61,11 +61,11 @@ CREATE TABLE `pemeriksaan` (
 
 CREATE TABLE `user` (
   `ID_USER` int NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `hak_akses` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `nama` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `hak_akses` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
