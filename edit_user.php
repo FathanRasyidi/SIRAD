@@ -147,12 +147,20 @@ if (isset($_POST['submit'])) {
     <!-- component -->
     <?php include 'navbar.php'; ?>
 
-    <div style="margin: 20px; width: 100%; margin-left: 280px;">
-        <div class="flex flex-row mb-2">
-            <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md bg-gray-200 w-full"
-                style="align-content: center; background-image: url(https://previews.dropbox.com/p/thumb/AAvyFru8elv-S19NMGkQcztLLpDd6Y6VVVMqKhwISfNEpqV59iR5sJaPD4VTrz8ExV7WU9ryYPIUW8Gk2JmEm03OLBE2zAeQ3i7sjFx80O-7skVlsmlm0qRT0n7z9t07jU_E9KafA9l4rz68MsaZPazbDKBdcvEEEQPPc3TmZDsIhes1U-Z0YsH0uc2RSqEb0b83A1GNRo86e-8TbEoNqyX0gxBG-14Tawn0sZWLo5Iv96X-x10kVauME-Mc9HGS5G4h_26P2oHhiZ3SEgj6jW0KlEnsh2H_yTego0grbhdcN1Yjd_rLpyHUt5XhXHJwoqyJ_ylwvZD9-dRLgi_fM_7j/p.png?fv_content=true&size_mode=5); background-position: 90% center;">
-                <h1 class="text-2xl font-medium p-4">Input/Edit Data User</h1>
-                <div class="mx-auto w-full pt-5 px-6 py-6 bg-white border-0 shadow-lg sm:rounded-xl">
+    <div class="flex-1 p-6 pt-0 ml-64">
+        <!-- Header -->
+        <div class="p-6 py-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Input/Edit Data Pasien</h1>
+            <a class="navbar-brand flex items-center my-2">
+                <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
+                    style="margin-right: 10px; border-color: #16a34a;">
+                <div>
+                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
+                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
+                </div>
+            </a>
+        </div>
+                <div class="mx-auto w-full pt-5 p-10 bg-white border-0 shadow-lg sm:rounded-xl">
                     <form method="POST" action="" id="form">
                         <div class="relative z-0 w-full mb-5">
                             <input type="text" name="nama" value="<?php echo $nama ?>" placeholder=" "

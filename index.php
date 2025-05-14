@@ -51,7 +51,7 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
     <!-- Isian -->
     <div class="flex-1 p-6 pt-0 ml-64">
       <!-- Header -->
-      <div class="p-6 py-7 flex justify-between items-center">
+      <div class="p-6 py-6 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <a class="navbar-brand flex items-center my-2">
           <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"

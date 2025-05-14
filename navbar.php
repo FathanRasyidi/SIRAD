@@ -1,6 +1,6 @@
 <aside
   class="fixed-sidebar flex flex-col w-64 h-screen pb-6 px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l">
-  <a class="navbar-brand text-gray-600 flex items-center my-2">
+  <a class="navbar-brand text-gray-600 flex items-center pl-2 my-2">
     <img src="img/sr.png" alt="" width="50" height="50" class="d-inline-block" id="logo" style="margin-right: 10px">
     <span class="ml-2">Sistem Informasi Radiologi</span>
   </a>
