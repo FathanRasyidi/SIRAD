@@ -42,18 +42,18 @@ if (isset($_COOKIE['user'])) {
 <body class="antialiased bg-gradient-to-br from-green-200 to-white">
     <div class="container px-8 mx-auto">
         <div class="flex flex-col text-center md:text-left md:flex-row h-screen justify-evenly md:items-center">
-            <div class="flex flex-col w-full">
+            <div class="flex flex-col m-8 sm:mr-32">
                 <a class="navbar-brand text-gray-600 flex items-center">
                     <img src="img/sr.png" alt="" width="90" class="d-inline-block mr-3" id="logo">
                     <span class="ml-4">
-                        <h1 class="text-5xl text-gray-800 font-bold">SIRAD</h1>
+                        <h1 class="text-5xl text-gray-900 font-bold">SIRAD</h1>
                         <p class="w-9/12 mx-auto md:mx-0 text-gray-500">
                         Sistem Informasi Radiologi
                         </p>
                     </span>
                 </a>
             </div>
-            <div class="w-full md:w-full lg:w-9/12 mx-auto md:mx-0">
+            <div class="w-full md:w-full lg:w-4/12 mx-auto md:mx-0">
                 <div class="bg-white p-8 pb-4 flex flex-col w-full shadow-xl rounded-xl">
                     <h2 class="text-2xl font-bold text-gray-800 text-left mb-5">
                         LOGIN

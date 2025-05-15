@@ -64,9 +64,9 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
       </div>
       <!-- Content -->
       <div style="width: 100%;">
-        <div class="flex flex-row h-max mr-2">
+        <div class="flex flex-row h-max mr-2 w-full">
           <!-- Card Kiri -->
-          <div class="bg-white border rounded-xl shadow-lg p-6 pt-4 w-4/12">
+          <div class="bg-white border rounded-xl shadow-lg p-6 pt-4 w-3/12 min-w-[20rem]">
             <p class="text-xl font-bold mb-4">Activity Overview</p>
             <div class="grid grid-cols-2 gap-4">
               <!-- Pemeriksaan -->
@@ -102,7 +102,7 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
             </div>
           </div>
           <!-- Card Kanan -->
-          <div class="bg-white border rounded-xl shadow-lg mx-6 mr-0 px-6 py-4 w-8/12">
+          <div class="bg-white border rounded-xl shadow-lg mx-6 mr-0 px-6 py-4 w-9/12 min-w-[24rem]">
             <p class="text-xl"><strong>Informasi</strong></p>
             <div class="flex bg-blue-100 rounded-lg p-4 my-4 text-sm text-blue-700" role="alert">
               <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"

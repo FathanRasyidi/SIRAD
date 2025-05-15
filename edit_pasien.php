@@ -229,7 +229,8 @@ if (isset($_POST['submit'])) {
                 </div>
             </a>
         </div>
-        <div class="mx-auto w-full pt-8 p-10 bg-white border-0 shadow-lg sm:rounded-xl">
+        <!-- Card -->
+        <div class="mx-auto min-w-[32rem] w-full pt-8 p-10 bg-white border-0 shadow-lg rounded-xl">
             <div class="flex bg-yellow-100 rounded-lg p-4 mb-4 text-sm text-yellow-700" role="alert">
                 <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">

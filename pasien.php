@@ -235,8 +235,7 @@ if (isset($_POST['submit'])) {
                                             foreach ($image_arr as $gambar) { ?>
                                                 <a href="<?php echo $gambar ?>" target="_blank">
                                                     <span
-                                                        class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
-                                                        <span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+                                                        class="inline-flex items-center gap-1 rounded-xl bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
                                                         Lihat
                                                     </span>
                                                 </a>
@@ -249,8 +248,7 @@ if (isset($_POST['submit'])) {
                                                 <div x-data="{ open: false }">
                                                     <button @click="open = true">
                                                         <span
-                                                            class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
-                                                            <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                                                            class="inline-flex items-center gap-1 rounded-xl bg-green-100 px-3 py-1 text-xs font-semibold text-green-600">
                                                             Lihat
                                                         </span>
                                                     </button>
@@ -269,8 +267,7 @@ if (isset($_POST['submit'])) {
                                                     <div x-data="{ open: false }">
                                                         <button @click="open = true">
                                                             <span
-                                                                class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-                                                                <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                                                class="inline-flex items-center gap-1 rounded-xl bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-600">
                                                                 Edit
                                                             </span>
                                                         </button>
@@ -294,8 +291,7 @@ if (isset($_POST['submit'])) {
                                                 <div x-data="{ open: false }">
                                                     <button @click="open = true">
                                                         <span
-                                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-                                                            <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                                            class="inline-flex items-center gap-1 rounded-xl bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-600">
                                                             Isi
                                                         </span>
                                                     </button>

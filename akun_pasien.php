@@ -85,7 +85,7 @@ if (isset($_GET['search'])) {
             </a>
         </div>
         <!-- Card -->
-        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full">
+        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full min-w-[48rem]">
             <div class="flex mt-2 bg-blue-100 rounded-lg p-4 text-sm text-blue-700" role="alert">
                 <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +150,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
+                                            class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
                                             <?= $db['username'] ?>
                                         </span>
                                     </div>
@@ -163,8 +163,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-                                            <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-600">
                                             Pasien
                                         </span>
                                     </div>

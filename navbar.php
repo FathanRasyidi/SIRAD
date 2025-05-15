@@ -1,5 +1,5 @@
 <aside
-  class="fixed-sidebar flex flex-col w-64 h-screen pb-6 px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l">
+  class="fixed-sidebar flex flex-col w-64 h-full pb-6 px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l">
   <a class="navbar-brand text-gray-600 flex items-center pl-2 my-2">
     <img src="img/sr.png" alt="" width="50" height="50" class="d-inline-block" id="logo" style="margin-right: 10px">
     <span class="ml-2">Sistem Informasi Radiologi</span>
@@ -41,7 +41,7 @@
                 clip-rule="evenodd"></path>
             </svg>
 
-            <span class="mx-2 text-sm font-medium">Data User</span>
+            <span class="mx-2 text-sm font-medium">Akun User</span>
           </a>
         <?php } ?>
         <?php if ($user_type != 'pasien') { ?>
@@ -57,7 +57,7 @@
         <?php } ?>
       </div>
     </nav>
-    <a class="flex align-bottom items-center px-3 py-2 text-red-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-200 hover:text-red-600"
+    <a class="flex align-bottom items-center px-3 mt-20 py-2 text-red-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-200 hover:text-red-600"
       href="logout.php">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
         class="h-5 w-5">
@@ -65,7 +65,6 @@
           d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
           clip-rule="evenodd"></path>
       </svg>
-
       <span class="mx-2 text-sm font-medium">Logout</span>
     </a>
   </div>

@@ -160,67 +160,68 @@ if (isset($_POST['submit'])) {
                 </div>
             </a>
         </div>
-                <div class="mx-auto w-full pt-5 p-10 bg-white border-0 shadow-lg sm:rounded-xl">
-                    <form method="POST" action="" id="form">
-                        <div class="relative z-0 w-full mb-5">
-                            <input type="text" name="nama" value="<?php echo $nama ?>" placeholder=" "
-                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                                required>
-                            <label for="nama" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                                Nama</label>
-                        </div>
-
-                        <div class="relative z-0 w-full mb-5">
-                            <input type="username" name="username" value="<?php echo $username ?>" placeholder=" "
-                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                                required>
-                            <label for="username" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                                Username</label>
-                        </div>
-
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" name="password" value="<?php echo $password ?>" placeholder=" "
-                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                                required>
-                            <label for="password" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                                Password</label>
-                        </div>
-
-                        <fieldset class="relative z-0 w-full p-px mb-5">
-                            <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Hak Akses</legend>
-                            <div class="block pt-3 pb-2 space-x-20">
-                                <label>
-                                    <input type="radio" name="akses" value="admin" <?php if ($akses == 'admin')
-                                        echo 'checked' ?>
-                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                            required />
-                                        Admin
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="akses" value="dokter" <?php if ($akses == 'dokter')
-                                        echo 'checked' ?>
-                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                            required />
-                                        Dokter/Bangsal
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="akses" value="radiologi" <?php if ($akses == 'radiologi')
-                                        echo 'checked' ?>
-                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                            required />
-                                        Dokter Radiologi
-                                    </label>
-                                </div>
-                            </fieldset>
-
-                            <button id="button" type="submit" name="submit"
-                                class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg focus:outline-none">
-                                Submit
-                            </button>
-                        </form>
-                    </div>
+        <!-- Card -->
+        <div class="mx-auto min-w-[40rem] w-full pt-5 p-10 bg-white border-0 shadow-lg rounded-xl">
+            <form method="POST" action="" id="form">
+                <div class="relative z-0 w-full mb-5">
+                    <input type="text" name="nama" value="<?php echo $nama ?>" placeholder=" "
+                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                        required>
+                    <label for="nama" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                        Nama</label>
                 </div>
+
+                <div class="relative z-0 w-full mb-5">
+                    <input type="username" name="username" value="<?php echo $username ?>" placeholder=" "
+                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                        required>
+                    <label for="username" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                        Username</label>
+                </div>
+
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" name="password" value="<?php echo $password ?>" placeholder=" "
+                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                        required>
+                    <label for="password" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                        Password</label>
+                </div>
+
+                <fieldset class="relative z-0 w-full p-px mb-5">
+                    <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Hak Akses</legend>
+                    <div class="block pt-3 pb-2 space-x-20">
+                        <label>
+                            <input type="radio" name="akses" value="admin" <?php if ($akses == 'admin')
+                                echo 'checked' ?>
+                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                    required />
+                                Admin
+                            </label>
+                            <label>
+                                <input type="radio" name="akses" value="dokter" <?php if ($akses == 'dokter')
+                                echo 'checked' ?>
+                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                    required />
+                                Dokter/Bangsal
+                            </label>
+                            <label>
+                                <input type="radio" name="akses" value="radiologi" <?php if ($akses == 'radiologi')
+                                echo 'checked' ?>
+                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                    required />
+                                Dokter Radiologi
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <button id="button" type="submit" name="submit"
+                        class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg focus:outline-none">
+                        Submit
+                    </button>
+                </form>
             </div>
+        </div>
+        </div>
 
         </div>
 

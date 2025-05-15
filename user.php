@@ -79,7 +79,7 @@ if (isset($_GET['search'])) {
             </a>
         </div>
         <!-- Card -->
-        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full">
+        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full min-w-[48rem]">
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-xl ml-7 mt-4">List Akun</h2>
@@ -151,7 +151,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
+                                            class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
                                             <?= $db['username'] ?>
                                         </span>
                                     </div>
@@ -162,8 +162,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-                                            <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-600">
                                             <?php if ($db['akses'] == "admin") {
                                                 echo "Admin";
                                             } else if ($db['akses'] == "radiologi") {
