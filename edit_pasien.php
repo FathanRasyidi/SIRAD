@@ -61,44 +61,47 @@ if (isset($_POST['submit'])) {
     $tgl_lahir = date('d/m/Y', strtotime($_POST['tgl_lahir']));
     $alamat = $_POST['alamat'];
     $jenis_periksa = $_POST['jenis_periksa'];
-    $image = [];
+    $image = $_FILES['foto']['tmp_name']; //untuk upload foto
     $sekarang = date('d/m/Y');
 
     //untuk insert data ke database
     if ($name && $rekmed && $tanggal && $tgl_lahir && $alamat && $jenis_periksa && $dpjp) {
         if ($op == 'edit') {
             // hapus gambar lama
-            $sqlG = "SELECT gambar_pemeriksaan FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
-            $qG = mysqli_query($connect, $sqlG);
-            $row = mysqli_fetch_assoc($qG);
-            $imagePath = isset($row['gambar_pemeriksaan']) ? explode(',', $row['gambar_pemeriksaan']) : '';
-            foreach ($imagePath as $path) {
-                if (file_exists($path)) {
-                    unlink($path);
-                }
-            }
+            // $sqlG = "SELECT gambar_pemeriksaan FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
+            // $qG = mysqli_query($connect, $sqlG);
+            // $row = mysqli_fetch_assoc($qG);
+            // $imagePath = isset($row['gambar_pemeriksaan']) ? explode(',', $row['gambar_pemeriksaan']) : '';
+            // foreach ($imagePath as $path) {
+            //     if (file_exists($path)) {
+            //         unlink($path);
+            //     }
+            // }
             // untuk upload foto
-            if (isset($_FILES["foto"])) {
-                for ($i = 0; $i < count($_FILES["foto"]["name"]); $i++) {
-                    $file_name = $_FILES["foto"]["name"][$i];
-                    $file_tmp = $_FILES["foto"]["tmp_name"][$i];
-                    $file_type = $_FILES["foto"]["type"][$i];
-                    $file_size = $_FILES["foto"]["size"][$i];
-                    $file_error = $_FILES["foto"]["error"][$i];
+            // if (isset($_FILES["foto"])) {
+            //     for ($i = 0; $i < count($_FILES["foto"]["name"]); $i++) {
+            //         $file_name = $_FILES["foto"]["name"][$i];
+            //         $file_tmp = $_FILES["foto"]["tmp_name"][$i];
+            //         $file_type = $_FILES["foto"]["type"][$i];
+            //         $file_size = $_FILES["foto"]["size"][$i];
+            //         $file_error = $_FILES["foto"]["error"][$i];
 
-                    if ($file_error === 0) {
-                        $file_destination = "uploads/" . $rekmed . "_" . uniqid() . "_" . $file_name;
-                        if (!is_dir("uploads")) {
-                            mkdir("uploads");
-                        }
-                        move_uploaded_file($file_tmp, $file_destination);
-                        $image[] = $file_destination;
-                    } else {
-                        $error = "Gagal mengunggah file";
-                    }
-                }
-            }
-            $image_path = implode(',', $image);
+            //         if ($file_error === 0) {
+            //             $file_destination = "uploads/" . $rekmed . "_" . uniqid() . "_" . $file_name;
+            //             if (!is_dir("uploads")) {
+            //                 mkdir("uploads");
+            //             }
+            //             move_uploaded_file($file_tmp, $file_destination);
+            //             $image[] = $file_destination;
+            //         } else {
+            //             $error = "Gagal mengunggah file";
+            //         }
+            //     }
+            // }
+            // $image_path = implode(',', $image);
+
+            $fotoContent =  addslashes(file_get_contents($image));
+
             // Update data di tabel pasien terlebih dahulu
             $sql_pasien = "UPDATE pasien 
                 JOIN pemeriksaan ON pasien.ID_PASIEN = pemeriksaan.ID_PASIEN 
@@ -112,7 +115,7 @@ if (isset($_POST['submit'])) {
                     tanggal_pemeriksaan = '$tanggal', 
                     no_rekam_medis = '$rekmed',
                     jenis_pemeriksaan = '$jenis_periksa', 
-                    gambar_pemeriksaan = '$image_path' 
+                    gambar_pemeriksaan = '$fotoContent' 
                 WHERE ID_PEMERIKSAAN = '$id'";
             $query = mysqli_query($connect, $sql);
             // if ($image_path != "") {
@@ -125,33 +128,37 @@ if (isset($_POST['submit'])) {
                 echo "<script>alert('Data gagal diubah');</script>";
             }
         } else {
+            // UNTUK NON EDIT
             $checkRekmedQuery = "SELECT * FROM pemeriksaan WHERE no_rekam_medis = '$rekmed'"; // SEHARUSNYA DICEK KEMBALI KARENA REKMED SUDAH BUKAN UNIQUE
             $checkRekmedResult = mysqli_query($connect, $checkRekmedQuery);
             if (mysqli_num_rows($checkRekmedResult) > 0) {
                 header("location:javascript://history.go(-1)");
             } else {
                 // untuk upload foto
-                if (isset($_FILES["foto"])) {
-                    for ($i = 0; $i < count($_FILES["foto"]["name"]); $i++) {
-                        $file_name = $_FILES["foto"]["name"][$i];
-                        $file_tmp = $_FILES["foto"]["tmp_name"][$i];
-                        $file_type = $_FILES["foto"]["type"][$i];
-                        $file_size = $_FILES["foto"]["size"][$i];
-                        $file_error = $_FILES["foto"]["error"][$i];
+                // if (isset($_FILES["foto"])) {
+                //     for ($i = 0; $i < count($_FILES["foto"]["name"]); $i++) {
+                //         $file_name = $_FILES["foto"]["name"][$i];
+                //         $file_tmp = $_FILES["foto"]["tmp_name"][$i];
+                //         $file_type = $_FILES["foto"]["type"][$i];
+                //         $file_size = $_FILES["foto"]["size"][$i];
+                //         $file_error = $_FILES["foto"]["error"][$i];
 
-                        if ($file_error === 0) {
-                            $file_destination = "uploads/" . $rekmed . "_" . uniqid() . "_" . $file_name;
-                            if (!is_dir("uploads")) {
-                                mkdir("uploads");
-                            }
-                            move_uploaded_file($file_tmp, $file_destination);
-                            $image[] = $file_destination;
-                        } else {
-                            $error = "Gagal mengunggah file";
-                        }
-                    }
-                }
-                $image_path = implode(',', $image);
+                //         if ($file_error === 0) {
+                //             $file_destination = "uploads/" . $rekmed . "_" . uniqid() . "_" . $file_name;
+                //             if (!is_dir("uploads")) {
+                //                 mkdir("uploads");
+                //             }
+                //             move_uploaded_file($file_tmp, $file_destination);
+                //             $image[] = $file_destination;
+                //         } else {
+                //             $error = "Gagal mengunggah file";
+                //         }
+                //     }
+                // }
+                // $image_path = implode(',', $image);
+
+                $fotoContent =  addslashes(file_get_contents($image));
+
                 // insert data
                 $sqlp = "INSERT INTO pasien (nama_pasien, tanggal_lahir, alamat) VALUES ('$name', '$tgl_lahir', '$alamat')";
                 $queryp = mysqli_query($connect, $sqlp);
@@ -162,7 +169,7 @@ if (isset($_POST['submit'])) {
                 $rowp_id = mysqli_fetch_assoc($queryp_id);
                 $id_pasien = $rowp_id['ID_PASIEN'];
 
-                $sql = "INSERT INTO pemeriksaan (ID_USER, ID_PASIEN, no_rekam_medis, tanggal_pemeriksaan, jenis_pemeriksaan, gambar_pemeriksaan, expertise) VALUES ('$dpjp','$id_pasien' , '$rekmed', '$tanggal', '$jenis_periksa', '$image_path', '')";
+                $sql = "INSERT INTO pemeriksaan (ID_USER, ID_PASIEN, no_rekam_medis, tanggal_pemeriksaan, jenis_pemeriksaan, gambar_pemeriksaan, expertise) VALUES ('$dpjp','$id_pasien' , '$rekmed', '$tanggal', '$jenis_periksa', '$fotoContent', '')";
                 $query = mysqli_query($connect, $sql);
                 function encrypt($data)
                 {
@@ -435,7 +442,7 @@ if (isset($_POST['submit'])) {
                                 </button>
                             </div>
                         </div>
-                        <input type="file" name="foto[]" id="multi-upload-input" class="hidden" multiple required>
+                        <input type="file" name="foto" id="multi-upload-input" class="hidden" multiple required>
                     </div>
                 </div>
 
@@ -447,6 +454,29 @@ if (isset($_POST['submit'])) {
                     imagesContainer = document.getElementById("images-container");
                     multiUploadDisplayText = document.getElementById("multi-upload-text");
                     multiUploadDeleteButton = document.getElementById("multi-upload-delete");
+
+                    // Show existing image when editing
+                    <?php if ($op == 'edit' && !empty($db['gambar_pemeriksaan'])): ?>
+                        <?php $tampil_foto = base64_encode($db['gambar_pemeriksaan']); ?>
+                        // Display existing image
+                        imagesContainer.classList.add("w-full", "grid", "grid-cols-1", "sm:grid-cols-2", "md:grid-cols-3", "lg:grid-cols-4", "gap-4");
+                        
+                        let existingImageDiv = document.createElement('div');
+                        existingImageDiv.classList.add("h-64", "mb-3", "w-full", "p-3", "rounded-lg", "bg-cover", "bg-center", "border", "border-gray-300", "relative");
+                        existingImageDiv.style.backgroundImage = 'url(data:image/jpeg;base64,<?php echo $tampil_foto; ?>)';
+                        
+                        // Add label for existing image
+                        let existingLabel = document.createElement('div');
+                        existingLabel.classList.add("absolute", "top-1", "left-1", "bg-green-600", "text-white", "px-2", "py-1", "rounded", "text-xs");
+                        existingLabel.innerHTML = 'Gambar saat ini';
+                        existingImageDiv.appendChild(existingLabel);
+                        
+                        imagesContainer.appendChild(existingImageDiv);
+                        
+                        multiUploadDisplayText.innerHTML = 'Gambar saat ini tersimpan';
+                        multiUploadDeleteButton.classList.add("z-100", "p-2", "my-auto");
+                        multiUploadDeleteButton.classList.remove("hidden");
+                    <?php endif; ?>
 
                     multiUploadButton.onclick = function () {
                         multiUploadInput.click(); // this will trigger the click event

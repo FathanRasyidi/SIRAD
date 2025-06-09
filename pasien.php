@@ -3,7 +3,7 @@ session_start();
 include 'koneksi.php';
 $user_type = empty($_SESSION['usertype']) ? '' : $_SESSION['usertype'];
 $usn = empty($_SESSION['username']) ? '' : $_SESSION['username'];
-$user_id =  empty($_SESSION['id_user']) ? '' : $_SESSION['id_user']; //diganti menjadi dpjp
+$user_id = empty($_SESSION['id_user']) ? '' : $_SESSION['id_user']; //diganti menjadi dpjp
 
 //mengambil data user yang login
 if (isset($_COOKIE['user']) && !isset($_SESSION['login'])) {
@@ -94,7 +94,7 @@ $search = '';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
     // SEHARUSNYA ADA PERUBAHAN PADA QUERY KARENA ADANYA PERUBAHAN STRUKTUR DATABASE
-        $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
+    $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
             FROM pemeriksaan
             JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
             JOIN user ON pemeriksaan.ID_USER = user.ID_USER
@@ -259,15 +259,33 @@ if (isset($_POST['submit'])) {
                                     <td class="px-6 py-4"><?= $db['nama'] ?></td>
                                     <td class="px-6 py-4">
                                         <?php if ($db['gambar_pemeriksaan'] != null) {
-                                            $image_arr = explode(',', $db['gambar_pemeriksaan']);
-                                            foreach ($image_arr as $gambar) { ?>
-                                                <a href="<?php echo $gambar ?>" target="_blank">
+                                            // $image_arr = explode(',', $db['gambar_pemeriksaan']);
+                                            // foreach ($image_arr as $gambar) { ?>
+                                            <div x-data="{ open: false }">
+                                                <button @click="open = true">
                                                     <span
                                                         class="inline-flex items-center gap-1 rounded-xl bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
                                                         Lihat
                                                     </span>
-                                                </a>
-                                            <?php } ?>
+                                                </button>
+                                                <div x-show="open" class="fixed inset-0 flex items-center justify-center z-50 ">
+                                                    <div
+                                                        class="bg-gray-50 border border-gray-400 shadow-xl rounded-xl p-5 py-2 pb-1">
+                                                        <?php $tampil_foto = base64_encode($db['gambar_pemeriksaan']); ?>
+                                                        <div class="flex justify-between items-center mb-2">
+                                                            <h2 class="text-xl font-bold text-gray-900">Radiograf</h2>
+                                                            <button @click="open = false"
+                                                                class="text-red-600 hover:text-red-700 text-4xl font-bold">
+                                                                ×
+                                                            </button>
+                                                        </div>
+                                                        <hr class="border border-gray-200 -mx-5">
+                                                        <img src="data:image/jpeg;base64,<?= $tampil_foto ?>"
+                                                            class="min-w-96 min-h-16 max-w-[70vw] max-h-[70vh] w-auto h-auto object-contain my-4"
+                                                            alt="Gambar tidak dapat ditampilkan">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     <?php } ?>
                                     <td class="px-6 py-4">
@@ -345,7 +363,8 @@ if (isset($_POST['submit'])) {
                                     <td class="px-6 py-4">
                                         <div class="flex justify-end gap-4">
                                             <?php if ($user_type == "admin" || $user_type == "radiografer") { ?>
-                                                <a x-data="{ tooltip: 'Edite' }" href="edit_pasien.php?op=edit&id=<?= $db['ID_PEMERIKSAAN'] ?>">
+                                                <a x-data="{ tooltip: 'Edite' }"
+                                                    href="edit_pasien.php?op=edit&id=<?= $db['ID_PEMERIKSAAN'] ?>">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                         stroke-width="1.5" stroke="currentColor" class="h-6 w-6"
                                                         x-tooltip="tooltip">
@@ -355,7 +374,8 @@ if (isset($_POST['submit'])) {
                                                 </a>
                                             <?php } ?>
                                             <?php if ($user_type == "admin" || $user_type == "radiografer") { ?>
-                                                <a x-data="{ tooltip: 'Delete' }" href="pasien.php?op=delete&id=<?= $db['ID_PEMERIKSAAN'] ?>"
+                                                <a x-data="{ tooltip: 'Delete' }"
+                                                    href="pasien.php?op=delete&id=<?= $db['ID_PEMERIKSAAN'] ?>"
                                                     onclick="return confirm('Are you sure you want to delete this user?')">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                         stroke-width="1.5" stroke="currentColor" class="h-6 w-6"
