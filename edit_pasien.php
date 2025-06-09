@@ -100,7 +100,9 @@ if (isset($_POST['submit'])) {
             // }
             // $image_path = implode(',', $image);
 
-            $fotoContent =  addslashes(file_get_contents($image));
+            if (!empty($_FILES['foto']['tmp_name'])) {
+                $fotoContent = addslashes(file_get_contents($image));
+            }
 
             // Update data di tabel pasien terlebih dahulu
             $sql_pasien = "UPDATE pasien 
@@ -109,14 +111,26 @@ if (isset($_POST['submit'])) {
                 WHERE pemeriksaan.ID_PEMERIKSAAN = '$id'";
             mysqli_query($connect, $sql_pasien);
 
-            // Update data di tabel pemeriksaan
-            $sql = "UPDATE pemeriksaan 
-                SET ID_USER = '$dpjp', 
-                    tanggal_pemeriksaan = '$tanggal', 
-                    no_rekam_medis = '$rekmed',
-                    jenis_pemeriksaan = '$jenis_periksa', 
-                    gambar_pemeriksaan = '$fotoContent' 
-                WHERE ID_PEMERIKSAAN = '$id'";
+            // Cek apakah ada gambar baru yang diupload
+            if (!empty($_FILES['foto']['tmp_name'])) {
+                // New image uploaded, update with new image
+                $fotoContent = addslashes(file_get_contents($image));
+                $sql = "UPDATE pemeriksaan 
+                    SET ID_USER = '$dpjp', 
+                        tanggal_pemeriksaan = '$tanggal', 
+                        no_rekam_medis = '$rekmed',
+                        jenis_pemeriksaan = '$jenis_periksa', 
+                        gambar_pemeriksaan = '$fotoContent' 
+                    WHERE ID_PEMERIKSAAN = '$id'";
+            } else {
+                // Jika tidak ada gambar baru, update tanpa mengubah gambar
+                $sql = "UPDATE pemeriksaan 
+                    SET ID_USER = '$dpjp', 
+                        tanggal_pemeriksaan = '$tanggal', 
+                        no_rekam_medis = '$rekmed',
+                        jenis_pemeriksaan = '$jenis_periksa'
+                    WHERE ID_PEMERIKSAAN = '$id'";
+            }
             $query = mysqli_query($connect, $sql);
             // if ($image_path != "") {
             //     $sqli = "UPDATE data SET image = IF(image = '', '$image_path', CONCAT(image, ',', '$image_path')) WHERE ID_PEMERIKSAAN = '$id'";
@@ -129,7 +143,7 @@ if (isset($_POST['submit'])) {
             }
         } else {
             // UNTUK NON EDIT
-            $checkRekmedQuery = "SELECT * FROM pemeriksaan WHERE no_rekam_medis = '$rekmed'"; // SEHARUSNYA DICEK KEMBALI KARENA REKMED SUDAH BUKAN UNIQUE
+            $checkRekmedQuery = "SELECT * FROM pemeriksaan WHERE no_rekam_medis = '$rekmed'";
             $checkRekmedResult = mysqli_query($connect, $checkRekmedQuery);
             if (mysqli_num_rows($checkRekmedResult) > 0) {
                 header("location:javascript://history.go(-1)");
@@ -442,7 +456,7 @@ if (isset($_POST['submit'])) {
                                 </button>
                             </div>
                         </div>
-                        <input type="file" name="foto" id="multi-upload-input" class="hidden" multiple required>
+                        <input type="file" name="foto" id="multi-upload-input" class="hidden" accept="image/*" multiple <?php echo (empty($image) && $op != 'edit') ? 'required' : ''; ?>>
                     </div>
                 </div>
 

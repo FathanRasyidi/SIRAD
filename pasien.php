@@ -299,7 +299,7 @@ if (isset($_POST['submit'])) {
                                                         </span>
                                                     </button>
                                                     <div x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
-                                                        <div class="bg-white rounded-lg p-5">
+                                                        <div class="bg-gray-50 border border-gray-400 shadow-xl rounded-xl p-5">
                                                             <h2 class="text-black w-96 text-lg font-medium mb-4">Expertise</h2>
                                                             <textarea cols="30" class="w-full border border-gray-300 rounded-lg p-2"
                                                                 placeholder="Masukkan expertise"
@@ -318,7 +318,7 @@ if (isset($_POST['submit'])) {
                                                             </span>
                                                         </button>
                                                         <div x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
-                                                            <div class="bg-white rounded-lg p-5">
+                                                            <div class="bg-gray-50 border border-gray-400 shadow-xl rounded-xl p-5">
                                                                 <h2 class="text-black w-96 text-lg font-medium mb-4">Isi Expertise</h2>
                                                                 <form action="" method="POST">
                                                                     <input type="hidden" name="id" value="<?= $db['ID_PEMERIKSAAN'] ?>">
@@ -342,7 +342,7 @@ if (isset($_POST['submit'])) {
                                                         </span>
                                                     </button>
                                                     <div x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
-                                                        <div class="bg-white rounded-lg p-5">
+                                                        <div class="bg-gray-50 border border-gray-400 shadow-xl rounded-xl p-5">
                                                             <h2 class="text-black w-96 text-lg font-medium mb-4">Isi Expertise</h2>
                                                             <form action="" method="POST">
                                                                 <input type="hidden" name="id" value="<?= $db['ID_PEMERIKSAAN'] ?>">
