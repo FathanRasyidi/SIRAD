@@ -21,7 +21,7 @@ if (isset($_GET['pesan'])) {
 
 if (isset($_COOKIE['user'])) {
     $_SESSION['login'] = $_COOKIE['user'];
-    header("location:index.php");
+    header("location:dashboard.php");
     exit();
 }
 ?>

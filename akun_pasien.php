@@ -34,10 +34,10 @@ if (isset($_GET['op'])) {
 $search = '';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    $sql = "SELECT * FROM user WHERE akses = 'pasien' AND (nama LIKE '%$search%' OR username LIKE '%$search%' OR password LIKE '%$search%') ";
+    $sql = "SELECT * FROM user WHERE hak_akses = 'pasien' AND (nama LIKE '%$search%' OR username LIKE '%$search%' OR password LIKE '%$search%') ";
     $q = mysqli_query($connect, $sql);
 } else {
-    $sql = "SELECT * FROM user WHERE akses = 'pasien' ORDER BY dibuat DESC";
+    $sql = "SELECT * FROM user WHERE hak_akses = 'pasien' ORDER BY ID_USER DESC";
     $q = mysqli_query($connect, $sql);
 }
 
@@ -78,14 +78,11 @@ if (isset($_GET['search'])) {
             <a class="navbar-brand flex items-center my-2">
                 <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
                     style="margin-right: 10px; border-color: #16a34a;">
-                <div>
-                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
-                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
-                </div>
+                <?php include 'profile.php'; ?>
             </a>
         </div>
         <!-- Card -->
-        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full min-w-[48rem]">
+        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full">
             <div class="flex mt-2 bg-blue-100 rounded-lg p-4 text-sm text-blue-700" role="alert">
                 <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +147,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
+                                            class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
                                             <?= $db['username'] ?>
                                         </span>
                                     </div>
@@ -163,7 +160,8 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-600">
+                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
                                             Pasien
                                         </span>
                                     </div>

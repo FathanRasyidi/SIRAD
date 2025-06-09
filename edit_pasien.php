@@ -8,12 +8,13 @@ if (empty($_SESSION['login'])) {
     exit();
 }
 
-if ($user_type != "admin" && $user_type != "radiologi") {
+if ($user_type != "admin" && $user_type != "radiografer") {
     header("location:javascript://history.go(-1)");
     exit();
 }
 
 $op = "";
+$dpjp = "";
 $name = "";
 $rekmed = "";
 $tanggal = "";
@@ -27,26 +28,34 @@ if (isset($_GET['op'])) {
     $op = $_GET['op'];
     if ($op == 'edit') {
         $id = $_GET['id'];
-        $sql = "SELECT * FROM data WHERE id = '$id'";
+        // $sql = "SELECT * FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
+        $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.ID_USER, user.nama
+        FROM pemeriksaan
+        JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
+        JOIN user ON pemeriksaan.ID_USER = user.ID_USER
+        WHERE pemeriksaan.ID_PEMERIKSAAN = '$id'";
+
         $q = mysqli_query($connect, $sql);
         $db = mysqli_fetch_array($q);
 
         if (!$db) {
             $error = "Data tidak ditemukan";
         } else {
-            $rekmed = $db['rekmed'];
-            $tanggal = $db['tanggal'];
-            $name = $db['nama_pasien'];
-            $tgl_lahir = $db['tanggal_lahir'];
-            $alamat = $db['alamat'];
-            $jenis_periksa = $db['jenis_periksa'];
-            $image = $db['image'];
+            $rekmed = $db['no_rekam_medis'];
+            $tanggal = $db['tanggal_pemeriksaan'];
+            $name = $db['nama_pasien']; //tabel pasien
+            $tgl_lahir = $db['tanggal_lahir']; //tabel pasien
+            $alamat = $db['alamat']; //tabel pasien
+            $jenis_periksa = $db['jenis_pemeriksaan'];
+            $image = $db['gambar_pemeriksaan'];
+            $dpjp = $db['ID_USER']; //id user dokter penanggung jawab
         }
     }
 }
 
 if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
+    $name = $_POST['name']; //diambil dari form (jangan dari database)
+    $dpjp = $_POST['dpjp']; //id user dokter penanggung jawab
     $rekmed = $_POST['rekmed'];
     $tanggal = date('d/m/Y', strtotime($_POST['tanggal']));
     $tgl_lahir = date('d/m/Y', strtotime($_POST['tgl_lahir']));
@@ -56,13 +65,13 @@ if (isset($_POST['submit'])) {
     $sekarang = date('d/m/Y');
 
     //untuk insert data ke database
-    if ($name && $rekmed && $tanggal && $tgl_lahir && $alamat && $jenis_periksa) {
+    if ($name && $rekmed && $tanggal && $tgl_lahir && $alamat && $jenis_periksa && $dpjp) {
         if ($op == 'edit') {
             // hapus gambar lama
-            $sqlG = "SELECT image FROM data WHERE id = '$id'";
+            $sqlG = "SELECT gambar_pemeriksaan FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
             $qG = mysqli_query($connect, $sqlG);
             $row = mysqli_fetch_assoc($qG);
-            $imagePath = isset($row['image']) ? explode(',', $row['image']) : '';
+            $imagePath = isset($row['gambar_pemeriksaan']) ? explode(',', $row['gambar_pemeriksaan']) : '';
             foreach ($imagePath as $path) {
                 if (file_exists($path)) {
                     unlink($path);
@@ -90,10 +99,24 @@ if (isset($_POST['submit'])) {
                 }
             }
             $image_path = implode(',', $image);
-            $sql = "UPDATE data SET tanggal = '$tanggal', nama_pasien = '$name', tanggal_lahir = '$tgl_lahir', alamat = '$alamat', jenis_periksa = '$jenis_periksa', image = '$image_path' WHERE id = '$id'";
+            // Update data di tabel pasien terlebih dahulu
+            $sql_pasien = "UPDATE pasien 
+                JOIN pemeriksaan ON pasien.ID_PASIEN = pemeriksaan.ID_PASIEN 
+                SET pasien.nama_pasien = '$name', pasien.tanggal_lahir = '$tgl_lahir', pasien.alamat = '$alamat'
+                WHERE pemeriksaan.ID_PEMERIKSAAN = '$id'";
+            mysqli_query($connect, $sql_pasien);
+
+            // Update data di tabel pemeriksaan
+            $sql = "UPDATE pemeriksaan 
+                SET ID_USER = '$dpjp', 
+                    tanggal_pemeriksaan = '$tanggal', 
+                    no_rekam_medis = '$rekmed',
+                    jenis_pemeriksaan = '$jenis_periksa', 
+                    gambar_pemeriksaan = '$image_path' 
+                WHERE ID_PEMERIKSAAN = '$id'";
             $query = mysqli_query($connect, $sql);
             // if ($image_path != "") {
-            //     $sqli = "UPDATE data SET image = IF(image = '', '$image_path', CONCAT(image, ',', '$image_path')) WHERE id = '$id'";
+            //     $sqli = "UPDATE data SET image = IF(image = '', '$image_path', CONCAT(image, ',', '$image_path')) WHERE ID_PEMERIKSAAN = '$id'";
             //     $queryi = mysqli_query($connect, $sqli);
             // }
             if ($query) {
@@ -102,7 +125,7 @@ if (isset($_POST['submit'])) {
                 echo "<script>alert('Data gagal diubah');</script>";
             }
         } else {
-            $checkRekmedQuery = "SELECT * FROM data WHERE rekmed = '$rekmed'";
+            $checkRekmedQuery = "SELECT * FROM pemeriksaan WHERE no_rekam_medis = '$rekmed'"; // SEHARUSNYA DICEK KEMBALI KARENA REKMED SUDAH BUKAN UNIQUE
             $checkRekmedResult = mysqli_query($connect, $checkRekmedQuery);
             if (mysqli_num_rows($checkRekmedResult) > 0) {
                 header("location:javascript://history.go(-1)");
@@ -130,7 +153,16 @@ if (isset($_POST['submit'])) {
                 }
                 $image_path = implode(',', $image);
                 // insert data
-                $sql = "INSERT INTO data (rekmed, tanggal, nama_pasien, tanggal_lahir, alamat, jenis_periksa, image, expertise) VALUES ('$rekmed', '$tanggal', '$name', '$tgl_lahir', '$alamat', '$jenis_periksa', '$image_path', '')";
+                $sqlp = "INSERT INTO pasien (nama_pasien, tanggal_lahir, alamat) VALUES ('$name', '$tgl_lahir', '$alamat')";
+                $queryp = mysqli_query($connect, $sqlp);
+
+                //NANTI DIGANTI DENGAN PENANGGUNGJAWAB
+                $sqlp_id = "SELECT ID_PASIEN FROM pasien WHERE nama_pasien = '$name' AND tanggal_lahir = '$tgl_lahir' AND alamat = '$alamat'";
+                $queryp_id = mysqli_query($connect, $sqlp_id);
+                $rowp_id = mysqli_fetch_assoc($queryp_id);
+                $id_pasien = $rowp_id['ID_PASIEN'];
+
+                $sql = "INSERT INTO pemeriksaan (ID_USER, ID_PASIEN, no_rekam_medis, tanggal_pemeriksaan, jenis_pemeriksaan, gambar_pemeriksaan, expertise) VALUES ('$dpjp','$id_pasien' , '$rekmed', '$tanggal', '$jenis_periksa', '$image_path', '')";
                 $query = mysqli_query($connect, $sql);
                 function encrypt($data)
                 {
@@ -139,7 +171,7 @@ if (isset($_POST['submit'])) {
                 }
                 $encryptedData = encrypt($tgl_lahir);
                 // membuat akun pasien
-                $sqln = "INSERT INTO user (username, password, nama, akses, dibuat) VALUES ('$rekmed', '$encryptedData', '$name', 'pasien', '$sekarang')";
+                $sqln = "INSERT INTO user (username, password, nama, hak_akses, dibuat) VALUES ('$rekmed', '$encryptedData', '$name', 'pasien', '$sekarang')";
                 $queryn = mysqli_query($connect, $sqln);
                 if ($query) {
                     header("location:pasien.php?op=tambah_sukses");
@@ -223,10 +255,7 @@ if (isset($_POST['submit'])) {
             <a class="navbar-brand flex items-center my-2">
                 <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
                     style="margin-right: 10px; border-color: #16a34a;">
-                <div>
-                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
-                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
-                </div>
+                <?php include 'profile.php'; ?>
             </a>
         </div>
         <!-- Card -->
@@ -250,6 +279,25 @@ if (isset($_POST['submit'])) {
                         required>
                     <label for="rekmed" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
                         No. Rekam Medis</label>
+                </div>
+
+                <div class="relative z-0 w-full mb-8">
+                    <label for="dpjp" name="dpjp"
+                        class=" duration-300 top-3 -z-1 origin-0 text-gray-500">
+                        Dokter Penanggungjawab</label>
+                    <select name="dpjp" id="dpjp"
+                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                        required>
+                        <?php
+                        // Ambil daftar DPJP dari tabel user
+                        $sql_dpjp = "SELECT ID_USER, nama FROM user WHERE hak_akses = 'dpjp'";
+                        $result_dpjp = mysqli_query($connect, $sql_dpjp);
+                        while ($row_dpjp = mysqli_fetch_assoc($result_dpjp)) {
+                            $selected = ($dpjp == $row_dpjp['ID_USER']) ? 'selected' : '';
+                            echo '<option value="' . htmlspecialchars($row_dpjp['ID_USER']) . '" ' . $selected . '>' . htmlspecialchars($row_dpjp['nama']) . '</option>';
+                        }
+                        ?>
+                    </select>
                 </div>
 
                 <div class="relative z-0 w-full mb-8">

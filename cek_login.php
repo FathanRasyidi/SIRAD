@@ -23,7 +23,8 @@ $cek = mysqli_num_rows($data);
 if ($cek > 0) {
     $row = mysqli_fetch_assoc($data);
     $login = $row['nama'];
-    $type = $row['akses'];
+    $type = $row['hak_akses'];
+    $_SESSION['id_user'] = $row['ID_USER'];
     $_SESSION['login'] = $login;
     $_SESSION['usertype'] = $type;
     $_SESSION['username'] = $username;
@@ -31,7 +32,7 @@ if ($cek > 0) {
         $encryptedUsername = encrypt($username);
         setcookie('user', $encryptedUsername, time() + 60 * 60 * 24);
     }
-    header("location:index.php");
+    header("location:dashboard.php");
     exit();
 } else {
     header("location:login.php?pesan=gagal");

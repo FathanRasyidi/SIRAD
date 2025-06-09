@@ -10,8 +10,8 @@
       <div class="space-y-3 ">
         <label class="px-3 text-xs text-gray-500 uppercase ">navigasi</label>
 
-        <a class="flex items-center px-3 py-2 <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-gray-300' : ''; ?> text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-200 hover:text-gray-700"
-          href="index.php">
+        <a class="flex items-center px-3 py-2 <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'bg-gray-300' : ''; ?> text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-200 hover:text-gray-700"
+          href="dashboard.php">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round"

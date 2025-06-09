@@ -17,7 +17,7 @@ if (isset($_GET['op'])) {
     $op = $_GET['op'];
     if ($op == 'delete') {
         $id = $_GET['id'];
-        $sql = "DELETE FROM user WHERE id = $id";
+        $sql = "DELETE FROM user WHERE ID_USER = $id";
         mysqli_query($connect, $sql);
     } else if ($op == 'tambah_sukses') {
         echo "<script>alert('Data user berhasil ditambahkan');</script>";
@@ -29,10 +29,10 @@ if (isset($_GET['op'])) {
 $search = '';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    $sql = "SELECT * FROM user WHERE akses != 'pasien' AND (nama LIKE '%$search%' OR username LIKE '%$search%' OR akses LIKE '%$search%') ORDER BY akses";
+    $sql = "SELECT * FROM user WHERE hak_akses != 'pasien' AND (nama LIKE '%$search%' OR username LIKE '%$search%' OR hak_akses LIKE '%$search%') ORDER BY hak_akses";
     $q = mysqli_query($connect, $sql);
 } else {
-    $sql = "SELECT * FROM user WHERE akses != 'pasien' ORDER BY akses";
+    $sql = "SELECT * FROM user WHERE hak_akses != 'pasien' ORDER BY hak_akses";
     $q = mysqli_query($connect, $sql);
 }
 
@@ -72,14 +72,11 @@ if (isset($_GET['search'])) {
             <a class="navbar-brand flex items-center my-2">
                 <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
                     style="margin-right: 10px; border-color: #16a34a;">
-                <div>
-                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
-                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
-                </div>
+                <?php include 'profile.php'; ?>
             </a>
         </div>
         <!-- Card -->
-        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full min-w-[48rem]">
+        <div class="bg-white border rounded-xl shadow-lg px-8 py-4 w-full">
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-xl ml-7 mt-4">List Akun</h2>
@@ -151,7 +148,7 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600">
+                                            class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
                                             <?= $db['username'] ?>
                                         </span>
                                     </div>
@@ -162,15 +159,18 @@ if (isset($_GET['search'])) {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-600">
-                                            <?php if ($db['akses'] == "admin") {
+                                            class="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1 text-xs font-semibold text-yellow-600">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
+                                            <?php if ($db['hak_akses'] == "admin") {
                                                 echo "Admin";
-                                            } else if ($db['akses'] == "radiologi") {
+                                            } else if ($db['hak_akses'] == "radiologi") {
                                                 echo "Dokter Radiologi";
-                                            } else if ($db['akses'] == "pasien") {
+                                            } else if ($db['hak_akses'] == "pasien") {
                                                 echo "Pasien";
-                                            } else if ($db['akses'] == "dokter") {
-                                                echo "Dokter/Bangsal";
+                                            } else if ($db['hak_akses'] == "dpjp") {
+                                                echo "Dokter penanggung jawab pasien";
+                                            } else if ($db['hak_akses'] == "radiografer") {
+                                                echo "Radiografer";
                                             } ?>
                                         </span>
                                     </div>
@@ -178,7 +178,7 @@ if (isset($_GET['search'])) {
 
                                 <td class="px-6 py-4">
                                     <div class="flex justify-end gap-4">
-                                        <a x-data="{ tooltip: 'Edite' }" href="edit_user.php?op=edit&id=<?= $db['id'] ?>">
+                                        <a x-data="{ tooltip: 'Edite' }" href="edit_user.php?op=edit&id=<?= $db['ID_USER'] ?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="h-6 w-6"
                                                 x-tooltip="tooltip">
@@ -186,7 +186,7 @@ if (isset($_GET['search'])) {
                                                     d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                             </svg>
                                         </a>
-                                        <a x-data="{ tooltip: 'Delete' }" href="user.php?op=delete&id=<?= $db['id'] ?>"
+                                        <a x-data="{ tooltip: 'Delete' }" href="user.php?op=delete&id=<?= $db['ID_USER'] ?>"
                                             onclick="return confirm('Are you sure you want to delete this user?')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="h-6 w-6"

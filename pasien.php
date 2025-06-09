@@ -3,6 +3,7 @@ session_start();
 include 'koneksi.php';
 $user_type = empty($_SESSION['usertype']) ? '' : $_SESSION['usertype'];
 $usn = empty($_SESSION['username']) ? '' : $_SESSION['username'];
+$user_id =  empty($_SESSION['id_user']) ? '' : $_SESSION['id_user']; //diganti menjadi dpjp
 
 //mengambil data user yang login
 if (isset($_COOKIE['user']) && !isset($_SESSION['login'])) {
@@ -11,7 +12,7 @@ if (isset($_COOKIE['user']) && !isset($_SESSION['login'])) {
     $qu = mysqli_query($connect, $sqlu);
     $dbu = mysqli_fetch_array($qu);
     $_SESSION['login'] = $dbu['nama'];
-    header("location:index.php");
+    header("location:dashboard.php");
     exit();
 }
 
@@ -22,11 +23,29 @@ if (empty($_COOKIE['user']) && !isset($_SESSION['login'])) {
 }
 
 // query untuk menampilkan data pasien
-if ($user_type != 'pasien') {
-    $sql = "SELECT * FROM data ORDER BY id DESC";
+if ($user_type != 'pasien' && $user_type != 'dpjp') {
+    // $sql = "SELECT * FROM pemeriksaan ORDER BY ID_PEMERIKSAAN DESC";
+    $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
+        FROM pemeriksaan
+        JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
+        JOIN user ON pemeriksaan.ID_USER = user.ID_USER
+        ORDER BY pemeriksaan.ID_PEMERIKSAAN DESC";
+    $q = mysqli_query($connect, $sql);
+} elseif ($user_type == 'dpjp') {
+    $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
+        FROM pemeriksaan
+        JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
+        JOIN user ON pemeriksaan.ID_USER = user.ID_USER
+        WHERE pemeriksaan.ID_USER = '$user_id'";
     $q = mysqli_query($connect, $sql);
 } else {
-    $sql = "SELECT * FROM data WHERE rekmed = '$usn'";
+    // $sql = "SELECT * FROM pemeriksaan WHERE no_rekam_medis = '$usn'";
+    $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
+        FROM pemeriksaan
+        JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
+        JOIN user ON pemeriksaan.ID_USER = user.ID_USER
+        WHERE pemeriksaan.no_rekam_medis = '$usn'";
+
     $q = mysqli_query($connect, $sql);
 }
 
@@ -36,25 +55,25 @@ if (isset($_GET['op'])) {
     $id = empty($_GET['id']) ? '' : $_GET['id'];
     if ($op == 'delete') {
         // menghapus gambar yang sudah diupload
-        $sql2 = "SELECT image FROM data WHERE id = '$id'";
+        $sql2 = "SELECT gambar_pemeriksaan FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
         $q2 = mysqli_query($connect, $sql2);
         $row = mysqli_fetch_assoc($q2);
-        $imagePath = isset($row['image']) ? explode(',', $row['image']) : '';
+        $imagePath = isset($row['gambar_pemeriksaan']) ? explode(',', $row['gambar_pemeriksaan']) : '';
         foreach ($imagePath as $path) {
             if (file_exists($path)) {
                 unlink($path);
             }
         }
         // mengambil rekam medis pasien yang dihapus
-        $Qrekmed = "SELECT rekmed FROM data WHERE id = '$id'";
+        $Qrekmed = "SELECT no_rekam_medis FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
         $Rrekmed = mysqli_query($connect, $Qrekmed);
         $row = mysqli_fetch_assoc($Rrekmed);
-        $rekmed = $row['rekmed'];
+        $rekmed = $row['no_rekam_medis'];
         // menghapus akun pasien yang dihapus
         $sqld = "DELETE FROM user WHERE username = '$rekmed'";
         $qd = mysqli_query($connect, $sqld);
         // menghapus data dari database
-        $sql = "DELETE FROM data WHERE id = '$id'";
+        $sql = "DELETE FROM pemeriksaan WHERE ID_PEMERIKSAAN = '$id'";
         $q = mysqli_query($connect, $sql);
         if ($q) {
             echo "<script>alert('Data berhasil dihapus!')</script>";
@@ -74,7 +93,17 @@ if (isset($_GET['op'])) {
 $search = '';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    $sql = "SELECT * FROM data WHERE rekmed LIKE '%$search%' OR nama_pasien LIKE '%$search%' OR tanggal_lahir LIKE '%$search%' OR jenis_periksa LIKE '%$search%' OR tanggal LIKE '%$search%'";
+    // SEHARUSNYA ADA PERUBAHAN PADA QUERY KARENA ADANYA PERUBAHAN STRUKTUR DATABASE
+        $sql = "SELECT pemeriksaan.*, pasien.nama_pasien, pasien.alamat, pasien.tanggal_lahir, user.nama, user.ID_USER
+            FROM pemeriksaan
+            JOIN pasien ON pemeriksaan.ID_PASIEN = pasien.ID_PASIEN
+            JOIN user ON pemeriksaan.ID_USER = user.ID_USER
+            WHERE pemeriksaan.no_rekam_medis LIKE '%$search%' 
+            OR pasien.nama_pasien LIKE '%$search%' 
+            OR pasien.tanggal_lahir LIKE '%$search%' 
+            OR pemeriksaan.jenis_pemeriksaan LIKE '%$search%' 
+            OR pemeriksaan.tanggal_pemeriksaan LIKE '%$search%'
+            OR user.nama LIKE '%$search%'";
     $q = mysqli_query($connect, $sql);
 }
 
@@ -82,7 +111,7 @@ if (isset($_GET['search'])) {
 if (isset($_POST['submit'])) {
     $expertise = $_POST['expertise'];
     $id = $_POST['id'];
-    $sql = "UPDATE data SET expertise = '$expertise' WHERE id = '$id'";
+    $sql = "UPDATE pemeriksaan SET expertise = '$expertise' WHERE ID_PEMERIKSAAN = '$id'";
     $q = mysqli_query($connect, $sql);
     if ($q) {
         echo "<script>location.href='pasien.php'</script>";
@@ -127,10 +156,7 @@ if (isset($_POST['submit'])) {
             <a class="navbar-brand flex items-center my-2">
                 <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
                     style="margin-right: 10px; border-color: #16a34a;">
-                <div>
-                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
-                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
-                </div>
+                <?php include 'profile.php'; ?>
             </a>
         </div>
         <!-- Card -->
@@ -139,7 +165,7 @@ if (isset($_POST['submit'])) {
                 <div>
                     <h2 class="text-xl ml-7 mt-4">Pemeriksaan</h2>
                 </div>
-                <?php if ($user_type == "admin" || $user_type == "radiologi") { ?>
+                <?php if ($user_type == "admin" || $user_type == "radiografer") { ?>
                     <div class="inline-flex items-center rounded-md shadow-sm">
                         <a href="edit_pasien.php">
                             <button
@@ -175,7 +201,7 @@ if (isset($_POST['submit'])) {
                 </form>
             <?php } ?>
             <!-- Tabel  -->
-            <div class="overflow-hidden rounded-2xl border border-gray-300 shadow-md mb-4">
+            <div class="overflow-hidden rounded-2xl border border-gray-300 shadow-md mb-4 mt-6">
                 <?php if (mysqli_num_rows($q) == 0) { ?>
                     <div class="flex bg-red-100 rounded-lg p-4 text-sm text-red-700" role="alert">
                         <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"
@@ -203,6 +229,7 @@ if (isset($_POST['submit'])) {
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Tgl. Pemeriksaan</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Alamat</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Jenis Pemeriksaan</th>
+                                <th scope="col" class="px-6 py-4 font-medium text-gray-900">DPJP</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Radiograf</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">Expertise</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
@@ -218,20 +245,21 @@ if (isset($_POST['submit'])) {
                                             <div class="text-gray-400"><?= $db['tanggal_lahir'] ?></div>
                                         </div>
                                     </th>
-                                    <td class="px-6 py-4"><?= $db['rekmed'] ?></td>
+                                    <td class="px-6 py-4"><?= $db['no_rekam_medis'] ?></td>
                                     <td class="px-6 py-4">
                                         <div class="flex gap-2">
                                             <span
                                                 class="inline-flex items-center gap-1 px-2 py-1 text-s font-semibold text-blue-600">
-                                                <?= $db['tanggal'] ?>
+                                                <?= $db['tanggal_pemeriksaan'] ?>
                                             </span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4"><?= $db['alamat'] ?></td>
-                                    <td class="px-6 py-4"><?= $db['jenis_periksa'] ?></td>
+                                    <td class="px-6 py-4"><?= $db['jenis_pemeriksaan'] ?></td>
+                                    <td class="px-6 py-4"><?= $db['nama'] ?></td>
                                     <td class="px-6 py-4">
-                                        <?php if ($db['image'] != null) {
-                                            $image_arr = explode(',', $db['image']);
+                                        <?php if ($db['gambar_pemeriksaan'] != null) {
+                                            $image_arr = explode(',', $db['gambar_pemeriksaan']);
                                             foreach ($image_arr as $gambar) { ?>
                                                 <a href="<?php echo $gambar ?>" target="_blank">
                                                     <span
@@ -275,7 +303,7 @@ if (isset($_POST['submit'])) {
                                                             <div class="bg-white rounded-lg p-5">
                                                                 <h2 class="text-black w-96 text-lg font-medium mb-4">Isi Expertise</h2>
                                                                 <form action="" method="POST">
-                                                                    <input type="hidden" name="id" value="<?= $db['id'] ?>">
+                                                                    <input type="hidden" name="id" value="<?= $db['ID_PEMERIKSAAN'] ?>">
                                                                     <textarea name="expertise" id="expertise" cols="30"
                                                                         class="w-full border border-gray-300 rounded-lg p-2"
                                                                         placeholder="Masukkan expertise"><?php echo $db['expertise'] ?></textarea>
@@ -299,7 +327,7 @@ if (isset($_POST['submit'])) {
                                                         <div class="bg-white rounded-lg p-5">
                                                             <h2 class="text-black w-96 text-lg font-medium mb-4">Isi Expertise</h2>
                                                             <form action="" method="POST">
-                                                                <input type="hidden" name="id" value="<?= $db['id'] ?>">
+                                                                <input type="hidden" name="id" value="<?= $db['ID_PEMERIKSAAN'] ?>">
                                                                 <textarea name="expertise" id="expertise" cols="30" rows="10"
                                                                     class="w-full border border-gray-300 rounded-lg p-2"
                                                                     placeholder="Masukkan expertise"></textarea>
@@ -316,8 +344,8 @@ if (isset($_POST['submit'])) {
 
                                     <td class="px-6 py-4">
                                         <div class="flex justify-end gap-4">
-                                            <?php if ($user_type == "admin" || $user_type == "radiologi") { ?>
-                                                <a x-data="{ tooltip: 'Edite' }" href="edit_pasien.php?op=edit&id=<?= $db['id'] ?>">
+                                            <?php if ($user_type == "admin" || $user_type == "radiografer") { ?>
+                                                <a x-data="{ tooltip: 'Edite' }" href="edit_pasien.php?op=edit&id=<?= $db['ID_PEMERIKSAAN'] ?>">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                         stroke-width="1.5" stroke="currentColor" class="h-6 w-6"
                                                         x-tooltip="tooltip">
@@ -326,8 +354,8 @@ if (isset($_POST['submit'])) {
                                                     </svg>
                                                 </a>
                                             <?php } ?>
-                                            <?php if ($user_type == "admin") { ?>
-                                                <a x-data="{ tooltip: 'Delete' }" href="pasien.php?op=delete&id=<?= $db['id'] ?>"
+                                            <?php if ($user_type == "admin" || $user_type == "radiografer") { ?>
+                                                <a x-data="{ tooltip: 'Delete' }" href="pasien.php?op=delete&id=<?= $db['ID_PEMERIKSAAN'] ?>"
                                                     onclick="return confirm('Are you sure you want to delete this user?')">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                         stroke-width="1.5" stroke="currentColor" class="h-6 w-6"

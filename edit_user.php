@@ -29,7 +29,7 @@ if (isset($_GET['op'])) {
     $op = $_GET['op'];
     if ($op == 'edit') {
         $id = $_GET['id'];
-        $sql = "SELECT * FROM user WHERE id = '$id'";
+        $sql = "SELECT * FROM user WHERE ID_USER = '$id'";
         $q = mysqli_query($connect, $sql);
         $db = mysqli_fetch_array($q);
 
@@ -40,7 +40,7 @@ if (isset($_GET['op'])) {
             $username = $db['username'];
             $decryptPassword = base64_decode($db['password']);
             $password = $decryptPassword;
-            $akses = $db['akses'];
+            $akses = $db['hak_akses'];
         }
     }
 }
@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
     $nama = $_POST['nama'];
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $akses = $_POST['akses'];
+    $akses = $_POST['hak_akses'];
     $dibuat = date("d/m/Y");
 
     $encryptedPassword = encrypt($password);
@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
     //untuk insert data ke database
     if ($nama && $username && $password && $akses) {
         if ($op == 'edit') {
-            $sql = "UPDATE user SET nama='$nama', username='$username', password='$encryptedPassword', akses='$akses' WHERE id = $id";
+            $sql = "UPDATE user SET nama='$nama', username='$username', password='$encryptedPassword', hak_akses='$akses' WHERE ID_USER = $id";
             $query = mysqli_query($connect, $sql);
             if ($query) {
                 header("location:user.php?op=edit_sukses");
@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
             if (mysqli_num_rows($checkUsernameResult) > 0) {
                 echo "<script>alert('Username already exists');</script>";
             } else {
-                $sql = "INSERT INTO user (nama, username, password, akses, dibuat) VALUES ('$nama', '$username', '$encryptedPassword', '$akses', '$dibuat')";
+                $sql = "INSERT INTO user (nama, username, password, hak_akses, dibuat) VALUES ('$nama', '$username', '$encryptedPassword', '$akses', '$dibuat')";
                 $query = mysqli_query($connect, $sql);
                 if ($query) {
                     header("location:user.php?op=tambah_sukses");
@@ -154,74 +154,77 @@ if (isset($_POST['submit'])) {
             <a class="navbar-brand flex items-center my-2">
                 <img src="img/suisei.png" alt="Profile" width="50" height="50" class="rounded-full border-2" id="logo"
                     style="margin-right: 10px; border-color: #16a34a;">
-                <div>
-                    <span class="block font-bold text-gray-900"><?= $_SESSION['login'] ?></span>
-                    <span class="block text-sm text-gray-500"><?= $_SESSION['usertype'] ?></span>
-                </div>
+                <?php include 'profile.php'; ?>
             </a>
         </div>
-        <!-- Card -->
-        <div class="mx-auto min-w-[40rem] w-full pt-5 p-10 bg-white border-0 shadow-lg rounded-xl">
-            <form method="POST" action="" id="form">
-                <div class="relative z-0 w-full mb-5">
-                    <input type="text" name="nama" value="<?php echo $nama ?>" placeholder=" "
-                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
-                    <label for="nama" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                        Nama</label>
-                </div>
-
-                <div class="relative z-0 w-full mb-5">
-                    <input type="username" name="username" value="<?php echo $username ?>" placeholder=" "
-                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
-                    <label for="username" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                        Username</label>
-                </div>
-
-                <div class="relative z-0 w-full mb-10">
-                    <input type="text" name="password" value="<?php echo $password ?>" placeholder=" "
-                        class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
-                    <label for="password" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
-                        Password</label>
-                </div>
-
-                <fieldset class="relative z-0 w-full p-px mb-5">
-                    <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Hak Akses</legend>
-                    <div class="block pt-3 pb-2 space-x-20">
-                        <label>
-                            <input type="radio" name="akses" value="admin" <?php if ($akses == 'admin')
-                                echo 'checked' ?>
-                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                    required />
-                                Admin
-                            </label>
-                            <label>
-                                <input type="radio" name="akses" value="dokter" <?php if ($akses == 'dokter')
-                                echo 'checked' ?>
-                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                    required />
-                                Dokter/Bangsal
-                            </label>
-                            <label>
-                                <input type="radio" name="akses" value="radiologi" <?php if ($akses == 'radiologi')
-                                echo 'checked' ?>
-                                    class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
-                                    required />
-                                Dokter Radiologi
-                            </label>
+                <div class="mx-auto w-full pt-5 p-10 bg-white border-0 shadow-lg sm:rounded-xl">
+                    <form method="POST" action="" id="form">
+                        <div class="relative z-0 w-full mb-5">
+                            <input type="text" name="nama" value="<?php echo $nama ?>" placeholder=" "
+                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                                required>
+                            <label for="nama" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                                Nama</label>
                         </div>
-                    </fieldset>
 
-                    <button id="button" type="submit" name="submit"
-                        class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg focus:outline-none">
-                        Submit
-                    </button>
-                </form>
+                        <div class="relative z-0 w-full mb-5">
+                            <input type="username" name="username" value="<?php echo $username ?>" placeholder=" "
+                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                                required>
+                            <label for="username" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                                Username</label>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-10">
+                            <input type="text" name="password" value="<?php echo $password ?>" placeholder=" "
+                                class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                                required>
+                            <label for="password" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
+                                Password</label>
+                        </div>
+
+                        <fieldset class="relative z-0 w-full p-px mb-5">
+                            <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Hak Akses</legend>
+                            <div class="block pt-3 pb-2 space-x-20">
+                                <label>
+                                    <input type="radio" name="hak_akses" value="admin" <?php if ($akses == 'admin')
+                                        echo 'checked' ?>
+                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                            required />
+                                        Admin
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="hak_akses" value="dpjp" <?php if ($akses == 'dpjp')
+                                        echo 'checked' ?>
+                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                            required />
+                                        Dokter Penanggung Jawab Pasien
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="hak_akses" value="radiologi" <?php if ($akses == 'radiologi')
+                                        echo 'checked' ?>
+                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                            required />
+                                        Dokter Radiologi
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="hak_akses" value="radiografer" <?php if ($akses == 'radiografer')
+                                        echo 'checked' ?>
+                                            class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+                                            required />
+                                        Radiografer
+                                    </label>
+                                </div>
+                            </fieldset>
+
+                            <button id="button" type="submit" name="submit"
+                                class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg focus:outline-none">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
 
         </div>
 
