@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "tailwindcss -i ./src/input.css -o ./src/output.css",
-    "build": "esbuild src/index.js --bundle --outdir=public"
+    "build": "[my-framework] build --output public"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
