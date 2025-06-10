@@ -136,6 +136,9 @@ if (isset($_POST['submit'])) {
             //     $sqli = "UPDATE data SET image = IF(image = '', '$image_path', CONCAT(image, ',', '$image_path')) WHERE ID_PEMERIKSAAN = '$id'";
             //     $queryi = mysqli_query($connect, $sqli);
             // }
+
+//Tambahkan untuk update user
+
             if ($query) {
                 header("location:pasien.php?op=edit_sukses");
             } else {
@@ -191,9 +194,11 @@ if (isset($_POST['submit'])) {
                     return $encryptedData;
                 }
                 $encryptedData = encrypt($tgl_lahir);
+
                 // membuat akun pasien
                 $sqln = "INSERT INTO user (username, password, nama, hak_akses, dibuat) VALUES ('$rekmed', '$encryptedData', '$name', 'pasien', '$sekarang')";
                 $queryn = mysqli_query($connect, $sqln);
+
                 if ($query) {
                     header("location:pasien.php?op=tambah_sukses");
                 } else {
@@ -297,7 +302,7 @@ if (isset($_POST['submit'])) {
                 <div class="relative z-0 w-full mb-8">
                     <input type="number" name="rekmed" value="<?php echo $rekmed ?>" placeholder=" " min="0"
                         class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
+                        <?php echo ($op == 'edit') ? 'readonly' : ''; ?> required>
                     <label for="rekmed" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">
                         No. Rekam Medis</label>
                 </div>
@@ -308,7 +313,7 @@ if (isset($_POST['submit'])) {
                         Dokter Penanggungjawab</label>
                     <select name="dpjp" id="dpjp"
                         class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
+                        <?php echo ($op == 'edit') ? 'disabled readonly' : ''; ?> required>
                         <?php
                         // Ambil daftar DPJP dari tabel user
                         $sql_dpjp = "SELECT ID_USER, nama FROM user WHERE hak_akses = 'dpjp'";
@@ -319,6 +324,9 @@ if (isset($_POST['submit'])) {
                         }
                         ?>
                     </select>
+                    <?php if ($op == 'edit'): ?>
+                    <input type="hidden" name="dpjp" value="<?php echo htmlspecialchars($dpjp); ?>">
+                    <?php endif; ?>
                 </div>
 
                 <div class="relative z-0 w-full mb-8">
@@ -361,7 +369,7 @@ if (isset($_POST['submit'])) {
                         Jenis Pemeriksaan</label>
                     <select name="jenis_periksa" id="jenis_periksa"
                         class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-                        required>
+                        <?php echo ($op == 'edit') ? 'disabled readonly' : ''; ?> required>
                         <option value="THORAX PA" <?php if ($jenis_periksa == 'THORAX PA')
                             echo 'selected'; ?>>
                             THORAX PA</option>
@@ -432,6 +440,9 @@ if (isset($_POST['submit'])) {
                         <option value="USG" <?php if ($jenis_periksa == 'USG')
                             echo 'selected'; ?>>USG</option>
                     </select>
+                    <?php if ($op == 'edit'): ?>
+                    <input type="hidden" name="jenis_periksa" value="<?php echo htmlspecialchars($jenis_periksa); ?>">
+                    <?php endif; ?>
                 </div>
 
 
@@ -490,6 +501,9 @@ if (isset($_POST['submit'])) {
                         multiUploadDisplayText.innerHTML = 'Gambar saat ini tersimpan';
                         multiUploadDeleteButton.classList.add("z-100", "p-2", "my-auto");
                         multiUploadDeleteButton.classList.remove("hidden");
+                    <?php else: ?>
+                        // Show default text when not editing or no file selected
+                        multiUploadDisplayText.innerHTML = 'MAX 4MB';
                     <?php endif; ?>
 
                     multiUploadButton.onclick = function () {
@@ -538,7 +552,11 @@ if (isset($_POST['submit'])) {
                         imagesContainer.innerHTML = '';
                         imagesContainer.classList.remove("w-full", "grid", "grid-cols-1", "sm:grid-cols-2", "md:grid-cols-3", "lg:grid-cols-4", "gap-4");
                         multiUploadInput.value = '';
-                        multiUploadDisplayText.innerHTML = '';
+                        <?php if ($op == 'edit'): ?>
+                            multiUploadDisplayText.innerHTML = 'Gambar saat ini tersimpan';
+                        <?php else: ?>
+                            multiUploadDisplayText.innerHTML = 'MAX 4MB';
+                        <?php endif; ?>
                         multiUploadDeleteButton.classList.add("hidden");
                         multiUploadDeleteButton.classList.remove("z-100", "p-2", "my-auto");
                     }

@@ -2,6 +2,7 @@
 session_start();
 include 'koneksi.php';
 $user_type = empty($_SESSION['usertype']) ? '' : $_SESSION['usertype'];
+$user_id =  empty($_SESSION['id_user']) ? '' : $_SESSION['id_user']; 
 
 if (empty($_SESSION['login'])) {
     header("location:login.php?pesan=belum_login");
@@ -195,21 +196,21 @@ if (isset($_POST['submit'])) {
                                     </label>
                                     <label>
                                         <input type="radio" name="hak_akses" value="dpjp" <?php if ($akses == 'dpjp')
-                                        echo 'checked' ?>
+                                        echo 'checked' ?> <?php if ($op == 'edit' && $user_id == $id) echo 'disabled' ?>
                                             class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
                                             required />
                                         Dokter Penanggung Jawab Pasien
                                     </label>
                                     <label>
                                         <input type="radio" name="hak_akses" value="radiologi" <?php if ($akses == 'radiologi')
-                                        echo 'checked' ?>
+                                        echo 'checked' ?> <?php if ($op == 'edit' && $user_id == $id) echo 'disabled' ?>
                                             class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
                                             required />
                                         Dokter Radiologi
                                     </label>
                                     <label>
                                         <input type="radio" name="hak_akses" value="radiografer" <?php if ($akses == 'radiografer')
-                                        echo 'checked' ?>
+                                        echo 'checked' ?> <?php if ($op == 'edit' && $user_id == $id) echo 'disabled' ?>
                                             class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
                                             required />
                                         Radiografer
