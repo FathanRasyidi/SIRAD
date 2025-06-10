@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
-    "build": "esbuild ./src/script.js --outfile=./src/main.js --bundle --watch"
+    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css",
+    "build": "esbuild ./src/script.js --outfile=./src/main.js --bundle"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
